@@ -59,6 +59,13 @@ inline std::string readFile(std::string file) {
 
 	return contents;
 }
+
+inline glm::vec3 normaliseVector(glm::vec3 v)
+{
+	float length = glm::sqrt(glm::pow(v.x, 2.0f) + glm::pow(v.y, 2.0f) + glm::pow(v.z, 2.0f));
+	return v / length;
+}
+
 }; //Namespace GLUtils
 
 #endif
