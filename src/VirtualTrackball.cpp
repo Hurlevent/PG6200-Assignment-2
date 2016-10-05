@@ -24,6 +24,8 @@ glm::mat4 quatToMat4(glm::quat m_q) {
 
 	glm::mat3x3 rot_matrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 
+	//std::cout << "Rotation matrix: \n" << GLUtils::mat3toString(rot_matrix).c_str() << std::endl;
+
 	return glm::mat4(rot_matrix);
 }
 
@@ -64,31 +66,35 @@ glm::mat4 VirtualTrackball::rotate(int x, int y) {
 	  */
 
 	// Calculating the CROSS product between the source and destination vectors, in order to find the axis if rotation
-	axis_of_rotation.x = point_on_sphere_begin.y * point_on_sphere_end.z - point_on_sphere_begin.z * point_on_sphere_end.y;
-	axis_of_rotation.y = -(point_on_sphere_begin.x * point_on_sphere_end.z - point_on_sphere_begin.z * point_on_sphere_end.x);
-	axis_of_rotation.z = point_on_sphere_begin.x * point_on_sphere_end.y - point_on_sphere_begin.y * point_on_sphere_end.x;
+	axis_of_rotation.x = point_on_sphere_end.y * point_on_sphere_begin.z - point_on_sphere_end.z * point_on_sphere_begin.y;
+	axis_of_rotation.y = -(point_on_sphere_end.x * point_on_sphere_begin.z - point_on_sphere_end.z * point_on_sphere_begin.x);
+	axis_of_rotation.z = point_on_sphere_end.x * point_on_sphere_begin.y - point_on_sphere_end.y * point_on_sphere_begin.x;
+
 
 	// Normalize length of axis_of_rotation
 	axis_of_rotation = GLUtils::normaliseVector(axis_of_rotation);
-	float length_of_axis_of_rotation = glm::sqrt(glm::pow(axis_of_rotation.x, 2.0f) + glm::pow(axis_of_rotation.y, 2.0f) + glm::pow(axis_of_rotation.z, 2.0f));
+	//float length_of_axis_of_rotation = glm::sqrt(glm::pow(axis_of_rotation.x, 2.0f) + glm::pow(axis_of_rotation.y, 2.0f) + glm::pow(axis_of_rotation.z, 2.0f));
 
-	std::cout << "Length of axis_of_rotation: " << length_of_axis_of_rotation << std::endl;
+	//std::cout << "Length of axis_of_rotation: " << length_of_axis_of_rotation << std::endl;
 
 	// Calculating the DOT product of the source and destination vectors
 	float dot = point_on_sphere_begin.x * point_on_sphere_end.x +
 		point_on_sphere_begin.y * point_on_sphere_end.y +
 		point_on_sphere_begin.z * point_on_sphere_end.z;
-
+	std::cout << "DOT:: " << dot << std::endl;
+	
 	// Calculation the angle between the source and destination vectors
-	theta = glm::acos(dot);
+	theta = glm::degrees(glm::acos(dot));
 
 	std::cout << "rotate: " << std::endl;
 	std::cout << "Angle: " << theta << std::endl;
 	std::cout << "Axis: " << axis_of_rotation.x << " " << axis_of_rotation.y << " " << axis_of_rotation.z << std::endl;
 
-	glm::quat rotate(glm::cos(theta / 2), glm::sin(theta / 2) * axis_of_rotation);
-
+	//glm::quat rotate(glm::cos(theta / 2), glm::sin(theta / 2) * axis_of_rotation);
+	glm::quat rotate = glm::angleAxis(theta, axis_of_rotation);
 	quat_new = rotate;
+	//quat_old = quat_new;
+	//quat_new = glm::inverse(quat_old) * glm::rotate(quat_old, theta, axis_of_rotation) * quat_old;
 
 	return quatToMat4(quat_new);
 }
@@ -98,6 +104,8 @@ void VirtualTrackball::setWindowSize(int w, int h) {
 	this->h = h;
 }
 
+
+// FUNGERER !!!
 glm::vec2 VirtualTrackball::getNormalizedWindowCoordinates(int x, int y) {
 	glm::vec2 coord = glm::vec2(0.0f);
 	/**
@@ -113,6 +121,7 @@ glm::vec2 VirtualTrackball::getNormalizedWindowCoordinates(int x, int y) {
 	return coord;
 }
 
+// DENNE TROR JEG AT FUNGERER! Litt skeptisk med den "else"'en da
 glm::vec3 VirtualTrackball::getClosestPointOnUnitSphere(int x, int y) {
 	glm::vec2 normalized_coords;
 	glm::vec3 point_on_sphere;

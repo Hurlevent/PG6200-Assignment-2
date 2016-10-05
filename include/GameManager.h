@@ -23,7 +23,7 @@ public:
 	/**
 	 * Constructor
 	 */
-	GameManager();
+	GameManager(std::string model);
 
 	/**
 	 * Destructor
@@ -95,6 +95,8 @@ private:
 	std::shared_ptr<Model> model;
 
 	Timer my_timer; //< Timer for machine independent motion
+
+	std::string m_model;
 
 	glm::mat4 projection_matrix; //< OpenGL projection matrix
 	glm::mat4 model_matrix; //< OpenGL model transformation matrix

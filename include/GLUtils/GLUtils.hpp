@@ -7,12 +7,14 @@
 #include <assert.h>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 #include <GL/glew.h>
 
 #include "GLUtils/Program.hpp"
 #include "GLUtils/VBO.hpp"
 #include "GameException.h"
+
 
 namespace GLUtils {
 
@@ -64,6 +66,28 @@ inline glm::vec3 normaliseVector(glm::vec3 v)
 {
 	float length = glm::sqrt(glm::pow(v.x, 2.0f) + glm::pow(v.y, 2.0f) + glm::pow(v.z, 2.0f));
 	return v / length;
+}
+
+inline std::string mat3toString(glm::mat3 matrix)
+{
+	float m11 = matrix[0][0];
+	float m12 = matrix[1][0];
+	float m13 = matrix[2][0];
+	float m21 = matrix[0][1];
+	float m22 = matrix[1][1];
+	float m23 = matrix[2][1];
+	float m31 = matrix[0][2];
+	float m32 = matrix[1][2];
+	float m33 = matrix[2][2];
+	
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(2) <<
+		"| " << m11 << " " << m12 << " " << m13 << " |\n" <<
+		"| " << m21 << " " << m22 << " " << m23 << " |\n" <<
+		"| " << m31 << " " << m32 << " " << m33 << " |\n";
+	
+	return ss.str();
+	
 }
 
 }; //Namespace GLUtils

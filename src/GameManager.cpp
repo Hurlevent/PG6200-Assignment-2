@@ -16,8 +16,9 @@ using GLUtils::VBO;
 using GLUtils::Program;
 using GLUtils::readFile;
 
-GameManager::GameManager() {
+GameManager::GameManager(std::string model) {
 	my_timer.restart();
+	m_model = model;
 }
 
 GameManager::~GameManager() {
@@ -96,7 +97,7 @@ void GameManager::createVAO() {
 	glBindVertexArray(vao);
 	CHECK_GL_ERROR();
 
-	model.reset(new Model("models/bunny.obj", false));
+	model.reset(new Model(m_model.c_str(), false));
 	model->getVertices()->bind();
 	program->setAttributePointer("position", 3);
 	CHECK_GL_ERROR();
