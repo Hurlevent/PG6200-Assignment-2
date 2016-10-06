@@ -91,10 +91,10 @@ glm::mat4 VirtualTrackball::rotate(int x, int y) {
 	std::cout << "Axis: " << axis_of_rotation.x << " " << axis_of_rotation.y << " " << axis_of_rotation.z << std::endl;
 
 	//glm::quat rotate(glm::cos(theta / 2), glm::sin(theta / 2) * axis_of_rotation);
-	glm::quat rotate = glm::angleAxis(theta, axis_of_rotation);
-	quat_new = rotate;
+	//glm::quat rotate = glm::angleAxis(theta, axis_of_rotation);
+	//quat_new = rotate;
 	//quat_old = quat_new;
-	//quat_new = glm::inverse(quat_old) * glm::rotate(quat_old, theta, axis_of_rotation) * quat_old;
+	quat_new = glm::inverse(quat_old) * glm::rotate(quat_old, theta, axis_of_rotation) * quat_old;
 
 	return quatToMat4(quat_new);
 }

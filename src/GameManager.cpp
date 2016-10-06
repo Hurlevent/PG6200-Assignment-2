@@ -98,14 +98,19 @@ void GameManager::createVAO() {
 	CHECK_GL_ERROR();
 
 	model.reset(new Model(m_model.c_str(), false));
+	
+	GLint k = 6 * sizeof(float);
+
 	model->getVertices()->bind();
-	program->setAttributePointer("position", 3);
+	program->setAttributePointer("position", 3, GL_FLOAT, GL_FALSE, k, 0);
 	CHECK_GL_ERROR();
 	/**
 	  * Add normals to shader here, when you have loaded from file
 	  * i.e., remove the below line, and add the proper normals instead.
 	  */
-	program->setAttributePointer("normal", 3);
+	//program->setAttributePointer("normal", 3); LINE WAS ADDED BY MARTIN
+	program->setAttributePointer("normal", 3, GL_FLOAT, GL_FALSE, k, reinterpret_cast<void *>(3 * sizeof(float)));
+	CHECK_GL_ERROR();
 	
 	//Unbind VBOs and VAO
 	vertices->unbind(); //Unbinds both vertices and normals
