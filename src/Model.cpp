@@ -5,7 +5,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
-Model::Model(std::string filename, bool invert) {
+Model::Model(std::string filename, bool invert) : min_dim(std::numeric_limits<float>::max()), max_dim(-std::numeric_limits<float>::max()) {
 	std::vector<float> vertex_data, normal_data;
 	aiMatrix4x4 trafo;
 	aiIdentityMatrix4(&trafo);
@@ -22,13 +22,20 @@ Model::Model(std::string filename, bool invert) {
 	  */
 	//Load the model recursively into data
 	loadRecursive(root, invert, vertex_data, normal_data, scene, scene->mRootNode);
-	
-	//Set the transformation matrix for the root node
-	//These are hard-coded constants for the stanford bunny model.
-	root.transform = glm::scale(root.transform, glm::vec3(6.44));
-	root.transform = glm::translate(root.transform, glm::vec3(0.016800813, -0.11015295, 0.0014822669));
 
 	n_vertices = vertex_data.size();
+
+	MakeBoudingBox(vertex_data);
+
+	root.transform = glm::translate(root.transform, -((max_dim + min_dim)/2.0f));
+
+	root.transform = glm::scale(root.transform, glm::vec3(1.0));
+
+
+	//Set the transformation matrix for the root node
+	//These are hard-coded constants for the stanford bunny model.
+	//root.transform = glm::scale(root.transform, glm::vec3(6.44));
+	//root.transform = glm::translate(root.transform, glm::vec3(0.016800813, -0.11015295, 0.0014822669));
 
 	std::vector<float> vertex_attrib_data;
 
@@ -94,6 +101,7 @@ void Model::loadRecursive(MeshPart& part, bool invert,
 				normal_data.push_back(mesh->mNormals[index].x);
 				normal_data.push_back(mesh->mNormals[index].y);
 				normal_data.push_back(mesh->mNormals[index].z);
+
 			}
 		}
 	}
@@ -103,4 +111,42 @@ void Model::loadRecursive(MeshPart& part, bool invert,
 		part.children.push_back(MeshPart());
 		loadRecursive(part.children.back(), invert, vertex_data, normal_data, scene, node->mChildren[n]);
 	}
+
+}
+
+void Model::MakeBoudingBox(std::vector<float> vertex_data)
+{
+	// Finding the Axis-aligned bounding box
+	for (int offset = 0; offset < n_vertices; offset += 3)
+	{
+		if (vertex_data[offset] > max_dim.x)
+		{
+			max_dim.x = vertex_data[offset];
+		}
+		else if (vertex_data[offset + 1] > max_dim.y)
+		{
+			max_dim.y = vertex_data[offset + 1];
+		}
+		else if (vertex_data[offset + 2] > max_dim.z)
+		{
+			max_dim.z = vertex_data[offset + 2];
+		}
+		else if (vertex_data[offset] < min_dim.x)
+		{
+			min_dim.x = vertex_data[offset];
+		}
+		else if (vertex_data[offset + 1] < min_dim.y)
+		{
+			min_dim.y = vertex_data[offset + 1];
+		}
+		else if (vertex_data[offset + 2] < min_dim.z)
+		{
+			min_dim.z = vertex_data[offset + 2];
+		}
+	}
+
+	std::cout << "Bounding Box: " << std::endl;
+	std::cout << "Max-x: " << max_dim.x << " Max-y: " << max_dim.y << " Max-z: " << max_dim.z << std::endl;
+	std::cout << "Min-x: " << min_dim.x << " Min-y: " << min_dim.y << " Min-z: " << min_dim.z << std::endl;
+
 }

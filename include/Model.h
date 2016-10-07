@@ -39,7 +39,7 @@ public:
 private:
 	static void loadRecursive(MeshPart& part, bool invert,
 			std::vector<float>& vertex_data, std::vector<float>& normal_data, const aiScene* scene, const aiNode* node);
-			
+	void MakeBoundingBox();
 	const aiScene* scene;
 	MeshPart root;
 
@@ -48,6 +48,8 @@ private:
 
 	glm::vec3 min_dim;
 	glm::vec3 max_dim;
+
+	void MakeBoudingBox(std::vector<float> vertex_data);
 
 	unsigned int n_vertices;
 };
