@@ -90,6 +90,36 @@ inline std::string mat3toString(glm::mat3 matrix)
 	
 }
 
+inline std::string mat4toString(glm::mat4 matrix)
+{
+	float m11 = matrix[0][0];
+	float m12 = matrix[1][0];
+	float m13 = matrix[2][0];
+	float m14 = matrix[3][0];
+	float m21 = matrix[0][1];
+	float m22 = matrix[1][1];
+	float m23 = matrix[2][1];
+	float m24 = matrix[3][1];
+	float m31 = matrix[0][2];
+	float m32 = matrix[1][2];
+	float m33 = matrix[2][2];
+	float m34 = matrix[3][2];
+	float m41 = matrix[0][3];
+	float m42 = matrix[1][3];
+	float m43 = matrix[2][3];
+	float m44 = matrix[3][3];
+
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(2) <<
+		"| " << m11 << " " << m12 << " " << m13 << " " << m14 << " |\n" <<
+		"| " << m21 << " " << m22 << " " << m23 << " " << m24 << " |\n" <<
+		"| " << m31 << " " << m32 << " " << m33 << " " << m34 << " |\n" <<
+		"| " << m41 << " " << m42 << " " << m43 << " " << m44 << " |\n";
+
+	return ss.str();
+
+}
+
 }; //Namespace GLUtils
 
 #endif

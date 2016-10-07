@@ -103,6 +103,10 @@ private:
 	glm::mat4 view_matrix; //< OpenGL camera/view matrix
 	glm::mat3 normal_matrix; //< OpenGL matrix to transfor normals
 	glm::mat4 trackball_view_matrix; //< OpenGL camera matrix for the trackball
+
+	float m_zoom; // Used when zooming (changing fov)
+	float m_zoom_sensitivity; // Also used when zooming (changing fov)
+	float m_fov;
 	
 	VirtualTrackball trackball;
 	SDL_Window* main_window; //< Our window handle

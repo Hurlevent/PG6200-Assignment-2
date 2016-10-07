@@ -16,7 +16,7 @@ using GLUtils::VBO;
 using GLUtils::Program;
 using GLUtils::readFile;
 
-GameManager::GameManager(std::string model) {
+GameManager::GameManager(std::string model) : m_zoom(0.0f), m_zoom_sensitivity(2.5f), m_fov(45.0f) {
 	my_timer.restart();
 	m_model = model;
 }
@@ -74,9 +74,12 @@ void GameManager::setOpenGLStates() {
 }
 
 void GameManager::createMatrices() {
-	projection_matrix = glm::perspective(45.0f,	window_width / (float) window_height, 1.0f, 10.f);
+	projection_matrix = glm::perspective(m_fov,	window_width / (float) window_height, 1.0f, 10.f);
+	std::cout << "Projection_matrix: \n" << GLUtils::mat4toString(projection_matrix) << std::endl;
 	model_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(3));
+	std::cout << "Model_matrix: \n" << GLUtils::mat4toString(model_matrix) << std::endl;
 	view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
+	std::cout << "View_matrix: \n" << GLUtils::mat4toString(view_matrix) << std::endl;
 }
 
 void GameManager::createSimpleProgram() {
@@ -158,6 +161,23 @@ void GameManager::render() {
 	
 	glm::mat4 view_matrix_new = view_matrix*trackball_view_matrix;
 
+	if(m_zoom != 0)
+	{
+		m_fov += m_zoom;
+		m_zoom = 0;
+
+		std::cout << "new fov: " << m_fov << std::endl;
+		std::cout << "Projection_matrix: \n" << GLUtils::mat4toString(projection_matrix) << std::endl;
+
+		projection_matrix = glm::perspective(m_fov, window_width / static_cast<float>(window_height), 1.0f, 10.0f);
+
+		/*
+		program->use();
+		glUniformMatrix4fv(program->getUniform("projection_matrix"), 1, 0, glm::value_ptr(projection_matrix));
+		program->disuse();
+		*/
+	}
+
 	//Render geometry
 	glBindVertexArray(vao);
 	
@@ -186,10 +206,24 @@ void GameManager::play() {
 				break;
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE) //Esc
+				{
 					doExit = true;
+				}
+				else
 				if (event.key.keysym.sym == SDLK_q
 						&& event.key.keysym.mod & KMOD_CTRL) //Ctrl+q
+				{
 					doExit = true;
+				}
+				else
+				if (event.key.keysym.sym == SDLK_PAGEUP)
+				{
+					m_zoom += m_zoom_sensitivity;
+				}
+				else
+				if (event.key.keysym.sym == SDLK_PAGEDOWN) {
+					m_zoom -= m_zoom_sensitivity;
+				}
 				break;
 			case SDL_QUIT: //e.g., user clicks the upper right x
 				doExit = true;
