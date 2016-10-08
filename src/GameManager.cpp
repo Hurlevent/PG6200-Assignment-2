@@ -171,11 +171,11 @@ void GameManager::render() {
 
 		projection_matrix = glm::perspective(m_fov, window_width / static_cast<float>(window_height), 1.0f, 10.0f);
 
-		/*
-		program->use();
+		
+		
 		glUniformMatrix4fv(program->getUniform("projection_matrix"), 1, 0, glm::value_ptr(projection_matrix));
-		program->disuse();
-		*/
+		
+		
 	}
 
 	//Render geometry

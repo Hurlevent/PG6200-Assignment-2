@@ -26,11 +26,36 @@ Model::Model(std::string filename, bool invert) : min_dim(std::numeric_limits<fl
 	n_vertices = vertex_data.size();
 
 	MakeBoudingBox(vertex_data);
+	
+	float translate_x = max_dim.x + min_dim.x;
+	float translate_y = max_dim.y + min_dim.y;
+	float translate_z = max_dim.z + min_dim.z;
 
-	root.transform = glm::translate(root.transform, -((max_dim + min_dim)/2.0f));
+	glm::vec3 translate_vec3(translate_x, translate_y, translate_z);
 
-	root.transform = glm::scale(root.transform, glm::vec3(1.0));
+	translate_vec3 /= 2.0f;
+	translate_vec3 *= -1.0f;
 
+	std::cout << "Translate: " << translate_vec3.x << ", " << translate_vec3.y << ", " << translate_vec3.z << std::endl;
+
+	glm::vec3 displacement = glm::abs(min_dim - max_dim);
+	float scalefactor = 0.0f;
+	if (displacement.x > displacement.y)
+		scalefactor = displacement.x;
+	else
+		scalefactor = displacement.y;
+
+	if (displacement.z > scalefactor)
+		scalefactor = displacement.z;
+
+	glm::vec3 scale(1.0f / scalefactor);
+
+	std::cout << "Scale: " << scale.x << ", " << scale.y << ", " << scale.z << std::endl;
+
+	root.transform = glm::scale(root.transform, scale);
+
+	root.transform = glm::translate(root.transform, translate_vec3);
+	//root.transform = glm::translate(root.transform, -((max_dim + min_dim)/2.0f));
 
 	//Set the transformation matrix for the root node
 	//These are hard-coded constants for the stanford bunny model.
