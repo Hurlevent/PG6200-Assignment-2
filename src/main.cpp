@@ -6,7 +6,8 @@
 #include <Windows.h>
 #endif
 
-#define CUSTOM_MODELS
+
+#define CUSTOM_MODELS // remove in case we only want to load the bunny model
 
 /**
  * Simple program that starts our game manager

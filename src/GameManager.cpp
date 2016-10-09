@@ -75,11 +75,11 @@ void GameManager::setOpenGLStates() {
 
 void GameManager::createMatrices() {
 	projection_matrix = glm::perspective(m_fov,	window_width / (float) window_height, 1.0f, 10.f);
-	std::cout << "Projection_matrix: \n" << GLUtils::mat4toString(projection_matrix) << std::endl;
+	
 	model_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(3));
-	std::cout << "Model_matrix: \n" << GLUtils::mat4toString(model_matrix) << std::endl;
+	
 	view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
-	std::cout << "View_matrix: \n" << GLUtils::mat4toString(view_matrix) << std::endl;
+	
 }
 
 void GameManager::createSimpleProgram() {
@@ -107,11 +107,7 @@ void GameManager::createVAO() {
 	model->getVertices()->bind();
 	program->setAttributePointer("position", 3, GL_FLOAT, GL_FALSE, k, 0);
 	CHECK_GL_ERROR();
-	/**
-	  * Add normals to shader here, when you have loaded from file
-	  * i.e., remove the below line, and add the proper normals instead.
-	  */
-	//program->setAttributePointer("normal", 3); LINE WAS ADDED BY MARTIN
+	
 	program->setAttributePointer("normal", 3, GL_FLOAT, GL_FALSE, k, reinterpret_cast<void *>(3 * sizeof(float)));
 	CHECK_GL_ERROR();
 	
@@ -161,20 +157,21 @@ void GameManager::render() {
 	
 	glm::mat4 view_matrix_new = view_matrix*trackball_view_matrix;
 
+	// If the user is zooming, change fov
 	if(m_zoom != 0)
 	{
 		m_fov += m_zoom;
 		m_zoom = 0;
 
+#ifdef MORE_DEBUG_INFO
 		std::cout << "new fov: " << m_fov << std::endl;
 		std::cout << "Projection_matrix: \n" << GLUtils::mat4toString(projection_matrix) << std::endl;
+#endif
 
 		projection_matrix = glm::perspective(m_fov, window_width / static_cast<float>(window_height), 1.0f, 10.0f);
 
 		
-		
 		glUniformMatrix4fv(program->getUniform("projection_matrix"), 1, 0, glm::value_ptr(projection_matrix));
-		
 		
 	}
 
@@ -230,7 +227,6 @@ void GameManager::play() {
 				break;
 			}
 		}
-
 		//Render, and swap front and back buffers
 		render();
 		SDL_GL_SwapWindow(main_window);

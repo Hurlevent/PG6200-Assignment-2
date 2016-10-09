@@ -15,6 +15,7 @@
 #include "GLUtils/VBO.hpp"
 #include "GameException.h"
 
+//#define MORE_DEBUG_INFO // Uncomment for debug info on fov change, etc...
 
 namespace GLUtils {
 
@@ -62,6 +63,7 @@ inline std::string readFile(std::string file) {
 	return contents;
 }
 
+// I figured out after I made this function that glm::normalize() does the same thing. 
 inline glm::vec3 normaliseVector(glm::vec3 v)
 {
 	float length = glm::sqrt(glm::pow(v.x, 2.0f) + glm::pow(v.y, 2.0f) + glm::pow(v.z, 2.0f));

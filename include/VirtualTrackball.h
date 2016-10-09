@@ -34,6 +34,7 @@ public:
 	  */
 	glm::mat4 rotate(int x, int y);
 
+
 	/**
 	  * Sets the window size. This is important to be able to 
 	  * make sure the virtual trackball fills the whole window
@@ -62,6 +63,7 @@ private:
 	glm::quat quat_new; //View matrix that represents the new camera position
 
 	glm::vec3 point_on_sphere_begin; //Vector from origin to first point on the unit sphere
+
 };
 
 #endif

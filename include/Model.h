@@ -50,6 +50,10 @@ private:
 	glm::vec3 max_dim;
 
 	void MakeBoudingBox(std::vector<float> vertex_data);
+	glm::vec3 FindScaleVector();
+	glm::vec3 FindTranslateVector();
+
+	std::vector<float> MakeInterleavedVBO(std::vector<float> vertex_data, std::vector<float> normal_data);
 
 	unsigned int n_vertices;
 };

@@ -12,6 +12,7 @@
 #include "Model.h"
 #include "VirtualTrackball.h"
 
+
 /**
  * This class handles the game logic and display.
  * Uses SDL as the display manager, and glm for 
