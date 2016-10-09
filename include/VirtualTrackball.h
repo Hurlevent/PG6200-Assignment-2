@@ -34,7 +34,6 @@ public:
 	  */
 	glm::mat4 rotate(int x, int y);
 
-
 	/**
 	  * Sets the window size. This is important to be able to 
 	  * make sure the virtual trackball fills the whole window

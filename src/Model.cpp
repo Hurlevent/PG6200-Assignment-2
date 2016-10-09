@@ -142,7 +142,7 @@ std::vector<float> Model::MakeInterleavedVBO(std::vector<float> vertex_data, std
 {
 	std::vector<float> vertex_attrib_data; // The final container where the interleaved VBO will be stored
 
-	for (int offset = 0; offset < n_vertices; offset += 3)
+	for (unsigned int offset = 0; offset < n_vertices; offset += 3)
 	{
 		vertex_attrib_data.push_back(vertex_data[offset]);
 		vertex_attrib_data.push_back(vertex_data[offset + 1]);
@@ -159,7 +159,7 @@ std::vector<float> Model::MakeInterleavedVBO(std::vector<float> vertex_data, std
 void Model::MakeBoudingBox(std::vector<float> vertex_data)
 {
 	// Finding the Axis-aligned bounding box
-	for (int offset = 0; offset < n_vertices; offset += 3)
+	for (unsigned int offset = 0; offset < n_vertices; offset += 3)
 	{
 		if (vertex_data[offset] > max_dim.x)
 		{
